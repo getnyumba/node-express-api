@@ -1,5 +1,3 @@
-import User from "./user";
-/* eslint-disable import/prefer-default-export */
-export {
-    User,
-};
+import { User, Token } from "./user";
+
+export { User, Token };
