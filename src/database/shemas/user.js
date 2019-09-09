@@ -1,19 +1,24 @@
-import mongoose from 'mongoose';
+/*
+mongoose are possible to handle validations
+Be sure to readup on how to handle validations using mongodb
+it uses validator.js behind the scenes https://mongoosejs.com/docs/validation.html
+*/
+import Mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
+const UserSchema = new Mongoose.Schema({
     username: {
         type: String,
         unique: true,
     },
     password: {
         type: String,
-        required: true   
-    }, 
+        required: true,
+    },
     email: {
         type: String,
-        unique: true
-    }
+        unique: true,
+    },
 });
 
-const User = new mongoose.model('User', userSchema);
+const User = new Mongoose.model("User", UserSchema);
 export default User;
