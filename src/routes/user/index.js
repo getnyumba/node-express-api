@@ -1,13 +1,11 @@
-import { Router } from 'express';
-import UserController from './UserController';
-import { UserValidator } from '../../middleware';
+import { Router } from "express";
+import UserController from "./UserController";
 
 const userRouter = Router();
 
-userRouter.post(
-    '',
-    UserValidator.validateCreateUser,
-    UserController.getAllUserRecords
+userRouter.get(
+    "",
+    UserController.getAllUserRecords,
 );
 
 export default userRouter;

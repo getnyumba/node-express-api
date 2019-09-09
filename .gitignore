@@ -1,10 +1,10 @@
 # Logs
 logs
-*.loggit 
+*.loggit
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
+build
 # Runtime data
 pids
 *.pid

@@ -1,5 +1,5 @@
-import User from './user';
-
+import User from "./user";
+/* eslint-disable import/prefer-default-export */
 export {
-    User
-}
+    User,
+};
