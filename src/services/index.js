@@ -5,7 +5,7 @@
 Models => Database schemas
 */
 
-import UserService from "./UserService";
+import UserService from "./user-service";
 /* eslint-disable import/prefer-default-export */
 export {
     UserService,

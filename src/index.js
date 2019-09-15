@@ -2,7 +2,6 @@ import app from "./app";
 import mongoDB from "./database";
 import config from "./config";
 
-
 const { PORT } = config;
 
 mongoDB().then(() => {
