@@ -6,8 +6,6 @@ the main prefix for the endpoint will be defined in the app.js
 */
 
 /* eslint-disable import/prefer-default-export */
-import userRouter from "./user";
+import userRouter from './user';
 
-export {
-    userRouter,
-};
+export { userRouter };
