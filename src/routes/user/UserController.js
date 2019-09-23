@@ -15,4 +15,8 @@ export default class UserController {
   static async confirmEmail(req, res) {
     await UserService.confirmEmail(req, res);
   }
+
+  static async loginUser(req, res) {
+    await UserService.userLogin(req, res);
+  }
 }

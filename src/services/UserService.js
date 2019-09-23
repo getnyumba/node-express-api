@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import sgMail from '@sendgrid/mail';
 import { models } from '../database';
+import bcrypt from 'bcrypt';
 
 const { User, Token } = models;
 require('dotenv').config();
@@ -143,5 +144,37 @@ export default class UserService {
       decodedResult = decoded;
     });
     return decodedResult;
+  }
+
+  static async userLogin(req, res) {
+    const { username, password } = req.body;
+    User.findOne({ username: username }, (loginErr, user) => {
+      if (!user) {
+        return res
+          .status(404)
+          .send({ msg: 'User not found. Please signup and try again' });
+      }
+      if (user && bcrypt.compareSync(password, user.hash)) {
+        if (user.isVerified) {
+          const { hash, ...userWithoutHash } = user.toObject();
+          const token = jwt.sign(
+            { subscriber: user.id },
+            process.env.JWTSECRETKEY,
+            {
+              expiresIn: '1d'
+            }
+          );
+          return res.status(200).send({
+            msg: { ...userWithoutHash, token, response: 'login sucessful' }
+          });
+        } else {
+          return res.status(401).send({
+            msg: 'user email not verified. Please confirm your email'
+          });
+        }
+      } else {
+        return res.status(401).send({ msg: 'Unauthourised acess. Try again.' });
+      }
+    });
   }
 }

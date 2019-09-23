@@ -8,7 +8,7 @@ all middleware must contain req, res, next in there parrams
 
 
 / */
-import JoiMiddleware from "./JoiValidator";
-import UserValidator from "./UserValidator";
+import JoiMiddleware from './JoiValidator';
+import UserValidator from './UserValidator';
 
 export { JoiMiddleware, UserValidator };
