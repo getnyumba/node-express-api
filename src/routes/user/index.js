@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import UserController from './UserController';
 import UserValidator from '../../middleware/UserValidator';
+import { SecureRoute } from '../../middleware';
 
 const userRouter = Router();
 
@@ -25,5 +26,7 @@ userRouter.post(
   UserValidator.validateUserLogin,
   UserController.loginUser
 );
+
+userRouter.get('/me', SecureRoute.loginRequired, UserController.getUserProfile);
 
 export default userRouter;

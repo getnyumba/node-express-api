@@ -19,4 +19,8 @@ export default class UserController {
   static async loginUser(req, res) {
     await UserService.userLogin(req, res);
   }
+
+  static async getUserProfile(req, res) {
+    await UserService.getUserProfile(req, res);
+  }
 }

@@ -148,7 +148,7 @@ export default class UserService {
 
   static async userLogin(req, res) {
     const { username, password } = req.body;
-    User.findOne({ username: username }, (loginErr, user) => {
+    await User.findOne({ username: username }, (loginErr, user) => {
       if (!user) {
         return res
           .status(404)
@@ -175,6 +175,20 @@ export default class UserService {
       } else {
         return res.status(401).send({ msg: 'Unauthourised acess. Try again.' });
       }
+    });
+  }
+
+  static async getUserProfile(req, res) {
+    const { subscriber } = req.jwt;
+    await User.findOne({ _id: subscriber }, (err, user) => {
+      if (err) {
+        return res.status(400).send({ msg: err });
+      }
+      if (!user) {
+        return res.status(404).send({ msg: 'user profile not found' });
+      }
+      const { hash, ...userWithoutHash } = user.toObject();
+      return res.status(200).send({ msg: 'user profile', ...userWithoutHash });
     });
   }
 }
