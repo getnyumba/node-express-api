@@ -10,5 +10,6 @@ all middleware must contain req, res, next in there parrams
 / */
 import JoiMiddleware from './JoiValidator';
 import UserValidator from './UserValidator';
+import SecureRoute from './SecureRoute';
 
-export { JoiMiddleware, UserValidator };
+export { JoiMiddleware, UserValidator, SecureRoute };
