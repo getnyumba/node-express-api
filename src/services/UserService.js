@@ -230,4 +230,20 @@ export default class UserService {
     }
     return exception;
   }
+
+  static async deleteUSerAccount(req, res) {
+    const { subscriber } = req.jwt;
+    await User.deleteOne({ _id: subscriber }, (err, resp) => {
+      if (err) {
+        return res.status(500).send({ msg: err });
+      }
+      if (resp.deletedCount > 0) {
+        return res.status(200).send({ msg: 'Account deleted successfully' });
+      } else {
+        return res
+          .status(400)
+          .send({ msg: 'Account not deleted or was not found' });
+      }
+    });
+  }
 }

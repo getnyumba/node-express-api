@@ -27,4 +27,8 @@ export default class UserController {
   static async updateUserProfile(req, res) {
     await UserService.updateUserProfile(req, res);
   }
+
+  static async deleteUserAccount(req, res) {
+    await UserService.deleteUSerAccount(req, res);
+  }
 }

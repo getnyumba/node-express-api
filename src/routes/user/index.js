@@ -36,4 +36,9 @@ userRouter.put(
   UserController.updateUserProfile
 );
 
+userRouter.delete(
+  '/me',
+  SecureRoute.loginRequired,
+  UserController.deleteUserAccount
+);
 export default userRouter;

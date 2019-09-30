@@ -1,8 +1,12 @@
-import mongoose from "mongoose";
-import config from "../config";
+import mongoose from 'mongoose';
+import config from '../config';
 
 const { DATABASE_URL } = config;
 
-const mongoDb = () => mongoose.connect(DATABASE_URL, { useNewUrlParser: true });
+const mongoDb = () =>
+  mongoose.connect(DATABASE_URL, {
+    useNewUrlParser: true,
+    useFindAndModify: false
+  });
 
 export default mongoDb;
