@@ -5,7 +5,11 @@ token generation
 helpers can be used to make a piece of code reusable
 
 */
-import { userCreateSchema, userLoginSchema } from './validations/user';
+import {
+  userCreateSchema,
+  userLoginSchema,
+  userUpdateSchema
+} from './validations/user';
 
 /* eslint-disable import/prefer-default-export */
-export { userCreateSchema, userLoginSchema };
+export { userCreateSchema, userLoginSchema, userUpdateSchema };

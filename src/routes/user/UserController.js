@@ -23,4 +23,8 @@ export default class UserController {
   static async getUserProfile(req, res) {
     await UserService.getUserProfile(req, res);
   }
+
+  static async updateUserProfile(req, res) {
+    await UserService.updateUserProfile(req, res);
+  }
 }

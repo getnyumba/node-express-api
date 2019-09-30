@@ -41,4 +41,27 @@ const userLoginSchema = Joi.object()
   .min(2)
   .max(2);
 
-export { userCreateSchema, userLoginSchema };
+const userUpdateSchema = Joi.object()
+  .keys({
+    first_name: Joi.string()
+      .required()
+      .trim(),
+    second_name: Joi.string()
+      .required()
+      .trim(),
+    phone_number: Joi.string()
+      .regex(/^[0-9]{10,12}$/, 'valid phone number')
+      .required()
+      .trim(),
+    username: Joi.string()
+      .required()
+      .trim(),
+    email: Joi.string()
+      .email()
+      .required()
+      .trim()
+  })
+  .min(5)
+  .max(5);
+
+export { userCreateSchema, userLoginSchema, userUpdateSchema };

@@ -29,4 +29,11 @@ userRouter.post(
 
 userRouter.get('/me', SecureRoute.loginRequired, UserController.getUserProfile);
 
+userRouter.put(
+  '/me',
+  SecureRoute.loginRequired,
+  UserValidator.validateUpateUser,
+  UserController.updateUserProfile
+);
+
 export default userRouter;

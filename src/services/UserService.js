@@ -14,30 +14,12 @@ export default class UserService {
 
   static async registerUser(req, res) {
     const userParam = req.body;
-    let exception = '';
-    if (
-      await User.findOne({
-        username: userParam.username
-      })
-    ) {
-      exception = `Username "${userParam.username}" is already in use`;
-    } else if (
-      await User.findOne({
-        phone_number: userParam.phone_number
-      })
-    ) {
-      exception = `Phone number "${userParam.phone_number}" is already in use`;
-    } else if (
-      await User.findOne({
-        email: userParam.email
-      })
-    ) {
-      exception = `Email "${userParam.email}" is already in use`;
-    }
+
+    let exception = await UserService.checkConflicts(userParam);
+
     if (userParam.password !== userParam.confirmPassword) {
       exception = 'Passwords do not match';
     }
-
     if (exception) {
       if (exception === 'Passwords do not match') {
         return res.status(400).send({ msg: exception });
@@ -50,14 +32,12 @@ export default class UserService {
       if (err) {
         return res.status(400).send({ msg: err.message });
       }
-
       // Create a verification token for this user
       const { _id: id } = user;
       const token = new Token({
         _userId: id,
         token: UserService.signToken(user.email)
       });
-
       // Save the verification token
       await token.save(tokenErr => {
         if (tokenErr) {
@@ -87,6 +67,23 @@ export default class UserService {
         msg: `A verification email has been sent to ${user.email}.`
       });
     });
+  }
+
+  static async checkConflicts(userParam) {
+    let exception = '';
+
+    if (await User.findOne({ username: userParam.username })) {
+      exception = `Username "${userParam.username}" is already in use`;
+    } else if (
+      await User.findOne({
+        phone_number: userParam.phone_number
+      })
+    ) {
+      exception = `Phone number "${userParam.phone_number}" is already in use`;
+    } else if (await User.findOne({ email: userParam.email })) {
+      exception = `Email "${userParam.email}" is already in use`;
+    }
+    return exception;
   }
 
   static signToken(email) {
@@ -122,7 +119,6 @@ export default class UserService {
             msg: 'This user has already been verified.'
           });
         }
-
         // Verify and save the user
         user.isVerified = true;
         user.save(updateErr => {
@@ -150,9 +146,9 @@ export default class UserService {
     const { username, password } = req.body;
     await User.findOne({ username: username }, (loginErr, user) => {
       if (!user) {
-        return res
-          .status(404)
-          .send({ msg: 'User not found. Please signup and try again' });
+        return res.status(404).send({
+          msg: 'User not found. Please signup and try again'
+        });
       }
       if (user && bcrypt.compareSync(password, user.hash)) {
         if (user.isVerified) {
@@ -165,7 +161,11 @@ export default class UserService {
             }
           );
           return res.status(200).send({
-            msg: { ...userWithoutHash, token, response: 'login sucessful' }
+            msg: {
+              ...userWithoutHash,
+              token,
+              response: 'login sucessful'
+            }
           });
         } else {
           return res.status(401).send({
@@ -190,5 +190,44 @@ export default class UserService {
       const { hash, ...userWithoutHash } = user.toObject();
       return res.status(200).send({ msg: 'user profile', ...userWithoutHash });
     });
+  }
+
+  static async updateUserProfile(req, res) {
+    const { subscriber } = req.jwt;
+    const userParam = req.body;
+
+    let exception = await UserService.checkUpdateConflicts(
+      userParam,
+      subscriber,
+      res
+    );
+    if (exception) {
+      return res.status(409).send({ msg: exception });
+    }
+    const newValues = { $set: userParam };
+    await User.updateOne({ _id: subscriber }, newValues, (err, newUser) => {
+      if (err) {
+        return res.status(500).send({ msg: err });
+      }
+      return res.status(200).send({ msg: 'update was successful', newUser });
+    });
+  }
+
+  static async checkUpdateConflicts(userParam, userId, res) {
+    let exception = '';
+    const userN = await User.findOne({ username: userParam.username });
+    const userC = await User.findOne({
+      phone_number: userParam.phone_number
+    });
+    const userE = await User.findOne({ email: userParam.email });
+
+    if (userN && !userN._id.equals(userId)) {
+      exception = `Username "${userParam.username}" is already in use`;
+    } else if (userC && !userC._id.equals(userId)) {
+      exception = `Phone number "${userParam.phone_number}" is already in use`;
+    } else if (userE && !userE._id.equals(userId)) {
+      exception = `Email "${userParam.email}" is already in use`;
+    }
+    return exception;
   }
 }

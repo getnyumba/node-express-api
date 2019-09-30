@@ -9,7 +9,7 @@ describe('UserService', () => {
   });
 
   it('should register a new user', async () => {
-    jest.spyOn(models.User, 'find').mockReturnValue([]);
+    jest.spyOn(models.User, 'save').mockReturnValue([]);
     const result = await UserService.findAllUsers({});
     expect(result).toEqual([]);
   });
