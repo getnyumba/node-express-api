@@ -1,5 +1,6 @@
 import { models } from "../database";
 
+// This Class is responsible for handling all database interactions for a user
 export default class UserService {
     /**
      * @param  {object} options
@@ -17,7 +18,7 @@ export default class UserService {
      * @description returns a single user object basing on the options
      */
     static async findOneUser(options) {
-        const user = await models.User.find(options);
+        const user = await models.User.findOne(options);
         return user;
     }
 
@@ -31,4 +32,18 @@ export default class UserService {
         const newUser = await models.User.create({ ...data });
         return newUser;
     }
+
+    /**
+     * @param  {object} data
+     * @param {string} id  id of user object to be updated 
+     * @returns {Promise}
+     * @description updates a single user object
+     *@
+     */
+    static async updateUser(id, data) {
+      const updated = await models.User.update({_id: id}, {$set: {...data}});
+      return updated;
+    }
+
+
 }

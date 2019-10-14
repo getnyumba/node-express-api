@@ -8,13 +8,11 @@ all middleware must contain req, res, next in there parrams
 
 
 / */
-<<<<<<< HEAD
 import JoiMiddleware from './JoiValidator';
-import UserValidator from './UserValidator';
+import UserMiddleware from './user-middleware';
 import SecureRoute from './SecureRoute';
 
-export { JoiMiddleware, UserValidator, SecureRoute };
-=======
+export { JoiMiddleware, UserMiddleware, SecureRoute };
 
 import UserValidations from "./validations/user-validations";
 
@@ -22,4 +20,3 @@ import UserValidations from "./validations/user-validations";
 export {
     UserValidations,
 };
->>>>>>> setup social authentication
