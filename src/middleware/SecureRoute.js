@@ -1,7 +1,8 @@
-import UserService from '../services/UserService';
+import {UserService} from '../services';
+import {decodeToken} from "../helpers"
 
 export default class SecureRoute {
-  static loginRequired(req, res, next) {
+  static async loginRequired(req, res, next) {
     const { headers } = req;
     const { authorization } = headers;
     if (authorization) {
@@ -12,13 +13,15 @@ export default class SecureRoute {
             .status(401)
             .send({ msg: 'Unauthorized access. Login and try again' });
         }
-        req.jwt = UserService.verifyToken(authToken[1], res);
+
+        req.user = await decodeToken(authToken[1]);
         return next();
       } catch (error) {
-        return res.status(403).send({ msg: error });
+        console.log(error);
+        return res.status(403).send({ message: error });
       }
     } else {
-      return res.status(401).send({ msg: 'No authorization headers' });
+      return res.status(401).send({ message: 'No authorization headers' });
     }
   }
 }

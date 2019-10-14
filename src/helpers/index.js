@@ -6,8 +6,9 @@ helpers can be used to make a piece of code reusable
 
 */
 export { userCreateSchema, userLoginSchema } from './validations/user';
-
-/* eslint-disable import/prefer-default-export */
+export {hashPassword, verifyPassword} from "./password-helper";
+export {createToken, decodeToken} from "./token-helper";
+export {sendUserEmailConfirmation} from "./user-helper";
 
 import GoogleAuthentication from "./google-helper";
 import FacebookAuthentication from "./facebook-helper";

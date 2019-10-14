@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-import { UserService } from '../../../services';
-import UserController from '../UserController';
-=======
 import { UserService } from "../../../services";
 import UserController from "../user-controller";
->>>>>>> setup social authentication
 
 let req;
 let res;

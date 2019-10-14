@@ -1,5 +1,8 @@
 import fetch from "node-fetch";
 import { UserService } from "../services";
+import configurations from "../config";
+import { createToken } from "./token-helper";
+import { sendEmail } from "./email-helper";
 
 class UserHelper {
     /**
@@ -31,6 +34,28 @@ class UserHelper {
             return e.message || "Couldn't fetch user profile";
         }
     }
+
+    
+}
+
+export const sendUserEmailConfirmation = async(user) =>  {
+    const {_id, email} = user;
+    const token = await createToken({id: _id, email});
+    
+    console.log(configurations.ACTIVATION_URL+token);
+
+    const mailOptions = {
+        from: 'no-reply@yourwebapplication.com',
+        to: user.email,
+        subject: 'Account Verification Token',
+        text: `Hello
+              Please verify your account by clicking the link below
+              ${configurations.ACTIVATION_URL}${token}
+              `
+    };
+    await sendEmail(mailOptions);
+    return;
+
 }
 
 export default UserHelper;

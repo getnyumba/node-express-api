@@ -2,16 +2,6 @@ import * as Joi from '@hapi/joi';
 
 const userCreateSchema = Joi.object()
   .keys({
-    first_name: Joi.string()
-      .required()
-      .trim(),
-    second_name: Joi.string()
-      .required()
-      .trim(),
-    phone_number: Joi.string()
-      .regex(/^[0-9]{10,12}$/, 'valid phone number')
-      .required()
-      .trim(),
     username: Joi.string()
       .required()
       .trim(),
@@ -26,8 +16,8 @@ const userCreateSchema = Joi.object()
       .required()
       .trim()
   })
-  .min(7)
-  .max(10);
+  .min(4)
+  .max(4);
 
 const userLoginSchema = Joi.object()
   .keys({
